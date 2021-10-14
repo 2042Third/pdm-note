@@ -2,7 +2,7 @@
 // Created by 18604 on 10/4/2021.
 //
 #include "pdm-sync.h"
-#include "cMain.h"
+#include "../cMain.h"
 #include <string.h>
 
 void pdm_sync::set_usr(char *a){

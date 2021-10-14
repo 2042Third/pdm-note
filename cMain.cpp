@@ -1,7 +1,7 @@
 ﻿//#pragma once
 #include "cMain.h"
 #include "cApp.h"
-#include "Tree_Ctrl.h"
+#include "file_handles/Tree_Ctrl.h"
 #include <wx/richtext/richtextbuffer.h>
 #include <vector>
 #include <string>
@@ -18,8 +18,8 @@
 #include <wx/tokenzr.h>
 #include "safety/cc20_multi.cpp"
 #include "id.h"
-#include "pdmrc.h"
-#include "pdm-sync.h"
+#include "file_handles/pdmrc.h"
+#include "file_handles/pdm-sync.h"
 
 //std::vector<wxString> current_files={};
 // TESTING ONLY -- Adapted from offical manual

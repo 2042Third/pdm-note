@@ -45,7 +45,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3 -g   -fpermissive")
 # Define a variable containing a list of source files for the project
 set(SRC_FILES
         cApp.cpp  cMain.cpp
-        Tree_Ctrl.cpp Tree_Ctrl.h pdmrc.cpp pdmrc.h pdm-sync.h pdm-sync.cpp)
+        file_handles/Tree_Ctrl.cpp file_handles/Tree_Ctrl.h file_handles/pdmrc.cpp file_handles/pdmrc.h file_handles/pdm-sync.h file_handles/pdm-sync.cpp)
 
 if(WIN32)
     # Include a RC file for windows
