@@ -308,7 +308,7 @@ void Tree_Ctrl::OnGetToolTip(wxCommandEvent& event){
 void Tree_Ctrl::OnItemMenuDir(wxCommandEvent& event){
   wxString directory_open = name_by_event(event);
   if(wxFileExists(directory_open+".pdm")) directory_open= directory_open+".pdm";
-  d_target->m_pOwner->WriteText("Open "+directory_open+" from tree\n");
+//  d_target->m_pOwner->WriteText("Open "+directory_open+" from tree\n");
   #ifdef __WXMSW__
     wxExecute(_("explorer.exe /select,"+directory_open));
   #endif//WXMSW
