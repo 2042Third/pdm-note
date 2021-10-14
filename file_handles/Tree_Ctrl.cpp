@@ -81,8 +81,7 @@ void Tree_Ctrl::AddItemsRecursively(const wxTreeItemId& idParent,
                 str.Printf("%s child %u", "Folder", unsigned(n + 1));
             else
                 str.Printf("%s child %u.%u", "File", unsigned(folder), unsigned(n + 1));
-            // here we pass to AppendItem() normal and selected item images (we
-            // suppose that selected image follows the normal one in the enum)
+
             int image, imageSel;
                 image = imageSel = -1;
             wxTreeItemId id = AppendItem(idParent, str, image, imageSel,
@@ -136,7 +135,7 @@ void Tree_Ctrl::addFileToTree(const wxString& tree_str) {
       item_enc=-1;
     size_t a = hasher((char*)filename.mb_str().data());
     tree_pair = tree_eles.insert(std::pair<size_t,std::string>(a, (char*)filename.mb_str().data()));
-    if( tree_pair.second==false)return;
+    if(!tree_pair.second)return;
     wxTreeItemId id = AppendItem(rootId, wxFileNameFromPath(filename),-1,
                                  -1,new Tree_Data(filename));
     SetItemTextColour(id,wxTheColourDatabase->Find("LIGHT GREY"));
@@ -308,9 +307,10 @@ void Tree_Ctrl::OnGetToolTip(wxCommandEvent& event){
 }
 void Tree_Ctrl::OnItemMenuDir(wxCommandEvent& event){
   wxString directory_open = name_by_event(event);
-
+  if(wxFileExists(directory_open+".pdm")) directory_open= directory_open+".pdm";
+  d_target->m_pOwner->WriteText("Open "+directory_open+" from tree\n");
   #ifdef __WXMSW__
-    wxExecute(_("explorer.exe "+directory_open));
+    wxExecute(_("explorer.exe /select,"+directory_open));
   #endif//WXMSW
   #ifdef __WXMAC__
     wxExecute(_("open -R "+directory_open));
