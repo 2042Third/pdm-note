@@ -19,7 +19,8 @@ public:
     void set_usr(char * a);
     int usr_set();
     int usr_sync(std::string a);
-    int usr_get(std::string a);
+    int usr_get(std::string a="");
+    int usr_get(std::string a, std::string b);
 private:
     pdm_network *usr_act = nullptr;
 };

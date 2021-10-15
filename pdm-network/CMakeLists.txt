@@ -22,7 +22,7 @@ set(CURL_LIBRARY "-lcurl")
 include_directories(${CURL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 add_library(pdm-network
         pdm-network.h
-        pdm-network.cpp)
+        pdm-network.cpp )
 target_compile_options(
         pdm-network PRIVATE
         -m64

@@ -157,36 +157,84 @@ void pdm_network::upload_sync_multi(std::string fname){
 }
 
 void pdm_network::download_sync(std::string fname){
-    std::string file_name = fname;
-    CURL *curl;
-    CURLcode res;
-    struct FtpFile ftpfile = {
-            "synced_file", /* name to store the file as if successful */
-            // ((const char*) ("downloaded_"+file_name).c_str()), /* name to store the file as if successful */
-            NULL
-    };
+  std::string file_name = fname;
+  CURL *curl;
+  CURLcode res;
+  std::string tmp_file = file_name;
 
-    curl_global_init(CURL_GLOBAL_DEFAULT);
-    curl = curl_easy_init();
-    if(curl) {
-        curl_easy_setopt(curl, CURLOPT_URL,
-                // ("pdm.pw:8080/file_up/download/test_file.txt"));
-                         ("pdm.pw:8080/file_up/download/"+user_nm+"/"+file_name).c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
+  struct FtpFile ftpfile = {
+//            "synced_file", /* name to store the file as if successful */
+      ( tmp_file.c_str()), /* name to store the file as if successful */
+      NULL
+  };
 
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+  curl = curl_easy_init();
+  if(curl) {
+    std::string get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+file_name;
+    if(std::equal(fname.begin(), fname.end(), "pdm_rc.conf")){
+      get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
 
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-
-        res = curl_easy_perform(curl);
-
-        curl_easy_cleanup(curl);
-        if(CURLE_OK != res) {
-            fprintf(stderr, "failure caused by: %d\n", res);
-        }
     }
-    if(ftpfile.stream)
-        fclose(ftpfile.stream); /* close the local file */
-    curl_global_cleanup();
+    curl_easy_setopt(curl, CURLOPT_URL,
+    // ("pdm.pw:8080/file_up/download/test_file.txt"));
+                     (get_url).c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
+
+
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+    res = curl_easy_perform(curl);
+
+    curl_easy_cleanup(curl);
+    if(CURLE_OK != res) {
+      fprintf(stderr, "failure caused by: %d\n", res);
+    }
+  }
+  if(ftpfile.stream)
+    fclose(ftpfile.stream); /* close the local file */
+  curl_global_cleanup();
+}
+
+void pdm_network::download_sync(std::string fname, std::string fpath){
+  std::string file_name = fname;
+  CURL *curl;
+  CURLcode res;
+  std::string tmp_file = fpath;
+
+  struct FtpFile ftpfile = {
+//            "synced_file", /* name to store the file as if successful */
+      ( tmp_file.c_str()), /* name to store the file as if successful */
+      NULL
+  };
+
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+  curl = curl_easy_init();
+  if(curl) {
+    std::string get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+file_name;
+    if(std::equal(fname.begin(), fname.end(), "pdm_rc.conf")){
+      get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
+
+    }
+    curl_easy_setopt(curl, CURLOPT_URL,
+    // ("pdm.pw:8080/file_up/download/test_file.txt"));
+                     (get_url).c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
+
+
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+    res = curl_easy_perform(curl);
+
+    curl_easy_cleanup(curl);
+    if(CURLE_OK != res) {
+      fprintf(stderr, "failure caused by: %d\n", res);
+    }
+  }
+  if(ftpfile.stream)
+    fclose(ftpfile.stream); /* close the local file */
+  curl_global_cleanup();
 }
 

@@ -21,6 +21,7 @@ public:
     void upload_sync(std::string fname);
     void upload_sync_multi(std::string fname);
     void download_sync(std::string fname);
+    void download_sync(std::string fname, std::string fpath);
 private:
     static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
     std::string user_nm;

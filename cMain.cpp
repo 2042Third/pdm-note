@@ -41,7 +41,8 @@ wxBEGIN_EVENT_TABLE(cMain, wxFrame)
   EVT_MENU(wxID_NEW, cMain::stc_new)
 	EVT_MENU(wxID_EXIT, cMain::stc_quit)
 	EVT_MENU((wxStandardID)window::id::PDM_ABOUT,cMain::c_about)
-	EVT_MENU((wxStandardID)window::id::LOAD_CONFIG,cMain::stc_load_config)
+  EVT_MENU((wxStandardID)window::id::LOAD_CONFIG,cMain::stc_load_config)
+  EVT_MENU((wxStandardID)window::id::PDM_GET_SYNC,cMain::stc_get_syncing)
 	EVT_MENU((wxStandardID)window::id::EDIT_CLEAR_TREE,cMain::stc_clear_tree)
 	EVT_CLOSE(cMain::on_close)
 
@@ -73,7 +74,8 @@ cMain::cMain(wxWindow* parent,
 	file_open = new wxMenuItem(menu_file, wxID_OPEN, wxString(wxT("&Open\tCtrl+o")), "Opens a file", wxITEM_NORMAL);
 	file_save = new wxMenuItem(menu_file, wxID_SAVE, wxString(wxT("&Save")) + wxT('\t') + wxT("Ctrl+s"), wxEmptyString, wxITEM_NORMAL);
 	file_save_as = new wxMenuItem(menu_file, wxID_SAVEAS, wxString(wxT("&Save As")), wxEmptyString, wxITEM_NORMAL);
-	file_new = new wxMenuItem(menu_file, wxID_NEW, wxString(wxT("&New\tCtrl+n")), wxEmptyString, wxITEM_NORMAL);
+  file_new = new wxMenuItem(menu_file, wxID_NEW, wxString(wxT("&New\tCtrl+n")), wxEmptyString, wxITEM_NORMAL);
+  file_sync = new wxMenuItem(menu_file, window::id::PDM_GET_SYNC, wxString(wxT("Sync From Cloud")), "Get Synced Files from Cloud", wxITEM_NORMAL);
 	pdm_about = new wxMenuItem(menu_file, window::id::PDM_ABOUT,wxString(wxT("&About")),"About pdm",wxITEM_NORMAL);
 	file_quit = new wxMenuItem(menu_pdm,wxID_EXIT);
 	file_config = new wxMenuItem(menu_file,window::id::LOAD_CONFIG,wxString(wxT("Load Confi&g\tCtrl+g")), "Reloads the configuration file ");
@@ -85,7 +87,10 @@ cMain::cMain(wxWindow* parent,
 	menu_file->AppendSeparator();
 	menu_file->Append(file_save_as);
 	menu_file->Append(file_config);
-	menu_pdm->Append(pdm_about);
+  menu_file->AppendSeparator();
+  menu_file->Append(file_sync);
+  menu_file->AppendSeparator();
+  menu_pdm->Append(pdm_about);
 	menu_pdm->Append(file_quit);
 	menu_view->Append(view_pswd_focus);
 	menu_view->Append(view_usrspc_focus);
@@ -288,7 +293,22 @@ void cMain::open_enc_file(wxString infile) {
 }
 
 void cMain::stc_load_config(wxCommandEvent &event) {
-    rc_file->load_rc();
+  rc_file->load_rc();
+}
+void cMain::stc_get_syncing(wxCommandEvent &event) {
+  if (!usr_enter_nm->GetValue().empty()){//repeated in the function
+    if(!syncing->usr_set()) syncing->set_usr(tctl_to_ary(usr_enter_nm));
+    int sync_out = syncing->usr_get();
+    if(sync_out){
+      tree_ctrl->d_target->m_pOwner->WriteText(_("Synced from Cloud.\n"));
+    }
+    else{
+      tree_ctrl->d_target->m_pOwner->WriteText(_("Failed to Sync from Cloud.\n"));
+    }
+  }
+  else{
+    tree_ctrl->d_target->m_pOwner->WriteText(_("No user name/account, cannot get files from cloud.\n"));
+  }
 }
 
 /**

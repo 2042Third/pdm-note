@@ -27,7 +27,7 @@ void pdmrc::init_rc(){
 }
 
 void pdmrc::load_rc(){
-//  wxString directory_name=pdm_dir->GetCwd()+sp+".pdmrc";
+//  wxString directory_name=pdm_dir->GetCwd()+sp+"pdm_rc.conf";
   wxString directory_name=file_dirtry;
   if(!wxFileExists(directory_name+sp+file_name)){
     ((cMain*)parent)->write_log("No configuration files");
@@ -57,9 +57,11 @@ void pdmrc::load_rc(){
       load_rc1=load_rc2->GetChildren();
       std::cout<<"loading file \""+
       load_rc1->GetChildren()->GetContent()<<"\""<<std::endl;
+
       while(load_rc1){
+        wxString tmp = load_rc1->GetChildren()->GetContent();
         ((cMain*)parent)->tree_ctrl->
-        addFileToTree(load_rc1->GetChildren()->GetContent());
+        addFileToTree(tmp);
         load_rc1=load_rc1->GetNext();
       }
     }
@@ -116,4 +118,8 @@ void pdmrc::save_rc() {
 //  if(((cMain*)parent)->DEBUG_OUT_PDM)
 //    ((cMain*)parent)->write_log("Saving config to "+directory_name+sp+file_name);
   pdm_rc->Save(directory_name+sp+file_name);
+  if(((cMain*)parent)->syncing->usr_set()){
+    ((cMain*)parent)->syncing->usr_sync(directory_name.ToStdString()+sp.ToStdString()+file_name.ToStdString());
+    ((cMain*)parent)->write_log("Config file synced to cloud.\n");
+  }
 }

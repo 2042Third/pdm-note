@@ -115,7 +115,8 @@ public:
     std::hash<std::string> hasher;
     std::pair<std::map<size_t,std::string>::iterator,bool> tree_pair;
 private:
-
+    void set_item_color(wxTreeItemId a, wxString b){   SetItemTextColour(a,wxTheColourDatabase->Find(b));}
+    void try_get_from_cloud(wxTreeItemId a, wxString b);
     wxTreeItemId rootId= AddRoot("Root",-1,-1,
                                  new Tree_Data("Root item"));
     void AddTestItemsToTree(size_t numChildren,

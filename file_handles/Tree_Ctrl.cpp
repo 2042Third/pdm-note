@@ -122,28 +122,39 @@ void Tree_Ctrl::reload_tree_from_eles() {
 }
 
 void Tree_Ctrl::addFileToTree(const wxString& tree_str) {
-    int item_enc=0;
-    wxString filename = tree_str;
-    if(((cMain*)parent)->check_extend(tree_str)) {
-      filename=((cMain*)parent)->extend_off(tree_str);
-    }
-    if(wxFileExists(filename+".pdm"))
-      item_enc=1;
-    else if(wxFileExists(filename))
-      item_enc=0;
-    else
-      item_enc=-1;
-    size_t a = hasher((char*)filename.mb_str().data());
-    tree_pair = tree_eles.insert(std::pair<size_t,std::string>(a, (char*)filename.mb_str().data()));
-    if(!tree_pair.second)return;
-    wxTreeItemId id = AppendItem(rootId, wxFileNameFromPath(filename),-1,
-                                 -1,new Tree_Data(filename));
-    SetItemTextColour(id,wxTheColourDatabase->Find("LIGHT GREY"));
-    if(item_enc==1)
-      SetItemTextColour(id,wxTheColourDatabase->Find("WHITE"));
-    else if(item_enc==-1)
-      SetItemTextColour(id,wxTheColourDatabase->Find("RED"));
-    wxString tip;
+  int item_enc=0;
+  wxString filename = tree_str;
+  if(((cMain*)parent)->check_extend(tree_str)) {
+    filename=((cMain*)parent)->extend_off(tree_str);
+  }
+  if(wxFileExists(filename+".pdm"))
+    item_enc=1;
+  else if(wxFileExists(filename))
+    item_enc=0;
+  else
+    item_enc=-1;
+  size_t a = hasher((char*)filename.mb_str().data());
+  tree_pair = tree_eles.insert(std::pair<size_t,std::string>(a, (char*)filename.mb_str().data()));
+  if(!tree_pair.second)return;
+  wxTreeItemId id = AppendItem(rootId, wxFileNameFromPath(filename),-1,
+                               -1,new Tree_Data(filename));
+  set_item_color(id,"LIGHT GREY");
+  if(item_enc==1)
+    set_item_color(id,"WHITE");
+  else if(item_enc==-1) {
+    try_get_from_cloud(id,filename+".pdm");
+  }
+  wxString tip;
+}
+
+void Tree_Ctrl::try_get_from_cloud(wxTreeItemId a, wxString b){
+  ((cMain*)parent)->syncing->usr_get(
+      (wxFileNameFromPath(b).ToStdString()),b.ToStdString());
+  if(wxFileExists(b))
+    set_item_color(a,"WHITE");
+  else {
+    set_item_color(a,"RED");
+  }
 }
 
 void Tree_Ctrl::AddTestItemsToTree(	size_t children_count,

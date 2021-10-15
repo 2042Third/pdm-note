@@ -87,7 +87,8 @@ public:
 	wxMenuItem* file_about;
 	wxMenuItem* file_new;
 	wxMenuItem* file_save_as;
-	wxMenuItem* file_quit;
+  wxMenuItem* file_quit;
+  wxMenuItem* file_sync;
 	wxMenuItem* file_config;
 
 	// Window handle
@@ -139,6 +140,7 @@ public:
 	void stc_save(wxCommandEvent& event);
 	void stc_save_as(wxCommandEvent& event);
 	void stc_new(wxCommandEvent& event);
+  void stc_get_syncing(wxCommandEvent& event);
 	void stc_clear_tree(wxCommandEvent& event);
 	void OnIdle( wxIdleEvent& event );
 	void on_close(wxCloseEvent& event);
