@@ -36,7 +36,9 @@ private:
   wxXmlNode* tree_rc=new wxXmlNode(wxXML_ELEMENT_NODE,"tree-rc");
   wxXmlNode* user_rc=new wxXmlNode(wxXML_ELEMENT_NODE,"last-user");
   wxXmlDocument* pdm_rc{};
+  wxString user_name_read="noname";
   const wxString sp= wxFileName::GetPathSeparators();
+  const wxString file_directory = wxStandardPaths::Get().GetUserDataDir();
   const wxString file_dirtry=wxStandardPaths::Get().GetConfigDir()+sp+".pdmrc";
   const wxString file_name = "pdm_rc.conf";
 };

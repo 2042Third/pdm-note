@@ -111,10 +111,10 @@ void pdmrc::read_rc(){
 void pdmrc::save_rc() {
   pdm_dir=new wxFileName();
   wxString directory_name=file_dirtry;
-  if(tree_rc!= nullptr)
-    root_rc->AddChild(tree_rc);
   if(user_rc!= nullptr)
     root_rc->AddChild(user_rc);
+  if(tree_rc!= nullptr)
+    root_rc->AddChild(tree_rc);
   pdm_dir->Mkdir(directory_name,0777,wxPATH_MKDIR_FULL);
 //  if(((cMain*)parent)->DEBUG_OUT_PDM)
 //    ((cMain*)parent)->write_log("Saving config to "+directory_name+sp+file_name);

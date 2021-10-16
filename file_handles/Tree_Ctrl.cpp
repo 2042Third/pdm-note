@@ -149,12 +149,15 @@ void Tree_Ctrl::addFileToTree(const wxString& tree_str) {
 
 void Tree_Ctrl::try_get_from_cloud(wxTreeItemId a, wxString b){
   if(!((cMain*)parent)->syncing->usr_set()) ((cMain*)parent)->syncing->set_usr(((cMain*)parent)->tctl_to_ary(((cMain*)parent)->usr_enter_nm));
-//  ((cMain*)parent)->write_log("PATH "+(wxFileNameFromPath(b).ToStdString())+
-//                              static_cast<std::string>(wxPathOnly(b) + "\\" + wxFileNameFromPath(b).ToStdString())+" \n");
-  saved_dir->Mkdir(wxPathOnly(b),0777,wxPATH_MKDIR_FULL);
-  ((cMain*)parent)->syncing->usr_get(
+  ((cMain*)parent)->write_log("PATH "+(wxFileNameFromPath(b).ToStdString())+
+                              static_cast<std::string>(wxPathOnly(b) + "\\" + wxFileNameFromPath(b).ToStdString())+" \n");
+  if(!wxDirExists(wxPathOnly(b))){
+    b = file_directory+sp+((cMain*)parent)->tctl_to_ary(((cMain*)parent)->usr_enter_nm)+sp+ wxFileNameFromPath(b);
+    saved_dir->Mkdir(b   ,0777,wxPATH_MKDIR_FULL);
+  }
+    ((cMain*)parent)->syncing->usr_get(
       (wxFileNameFromPath(b).ToStdString()),
-      static_cast<std::string>(wxPathOnly(b) + "\\" + wxFileNameFromPath(b).ToStdString()));
+      static_cast<std::string>(wxPathOnly(b) + sp + wxFileNameFromPath(b).ToStdString()));
   if(wxFileExists(b))
     set_item_color(a,"WHITE");
   else {

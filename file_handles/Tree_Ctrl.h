@@ -15,6 +15,7 @@
 #endif
 //#include "pdmFile.h"
 //#include "cApp.h
+#include <wx/stdpaths.h>
 #include <map>
 #include <vector>
 #include <iostream>
@@ -115,6 +116,7 @@ public:
     std::hash<std::string> hasher;
     std::pair<std::map<size_t,std::string>::iterator,bool> tree_pair;
 private:
+  wxString file_directory = wxStandardPaths::Get().GetUserDataDir();
   const wxString sp= wxFileName::GetPathSeparators();
     wxFileName* saved_dir = new wxFileName();
     void set_item_color(wxTreeItemId a, wxString b){   SetItemTextColour(a,wxTheColourDatabase->Find(b));}
