@@ -115,6 +115,8 @@ public:
     std::hash<std::string> hasher;
     std::pair<std::map<size_t,std::string>::iterator,bool> tree_pair;
 private:
+  const wxString sp= wxFileName::GetPathSeparators();
+    wxFileName* saved_dir = new wxFileName();
     void set_item_color(wxTreeItemId a, wxString b){   SetItemTextColour(a,wxTheColourDatabase->Find(b));}
     void try_get_from_cloud(wxTreeItemId a, wxString b);
     wxTreeItemId rootId= AddRoot("Root",-1,-1,

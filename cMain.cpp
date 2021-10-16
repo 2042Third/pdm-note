@@ -298,7 +298,11 @@ void cMain::stc_load_config(wxCommandEvent &event) {
 void cMain::stc_get_syncing(wxCommandEvent &event) {
   if (!usr_enter_nm->GetValue().empty()){//repeated in the function
     if(!syncing->usr_set()) syncing->set_usr(tctl_to_ary(usr_enter_nm));
-    int sync_out = syncing->usr_get();
+    int sync_out = syncing->usr_get((std::string)"pdm_rc.conf",
+                                    static_cast<string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf"));
+
+    tree_ctrl->d_target->m_pOwner->WriteText(_("Syncing from cloud to "+static_cast<string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf")+"\n"));
+    rc_file->load_rc();
     if(sync_out){
       tree_ctrl->d_target->m_pOwner->WriteText(_("Synced from Cloud.\n"));
     }

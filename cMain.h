@@ -174,6 +174,8 @@ public:
     char* tctl_to_ary(wxTextCtrl* a);
 
 private:
+  const wxString sp= wxFileName::GetPathSeparators();
+  const wxString file_dirtry=wxStandardPaths::Get().GetConfigDir()+sp+".pdmrc";
   int check_enter_nm(wxTextCtrl* a){
     if (usr_enter_nm->GetValue().empty()){
       wxMessageBox("Enter your user name first, then save.","Need user name" , wxOK);
@@ -188,7 +190,6 @@ private:
     }
     return 1;
   }
-  const wxString sp= wxFileName::GetPathSeparators();
   const wxString saved_file_dir=wxStandardPaths::Get().GetUserDataDir() ;
   wxFileName* saved_pdm_dir=new wxFileName();
   char* data_get(size_t a){

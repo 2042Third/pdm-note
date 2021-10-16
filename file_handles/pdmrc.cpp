@@ -68,6 +68,7 @@ void pdmrc::load_rc(){
     else if (load_rc2->GetName()=="last-user"&& load_rc2->GetChildren()){
       load_rc1=load_rc2->GetChildren();
       while(load_rc1){
+        ((cMain*)parent)->usr_enter_nm->Clear();
         ((cMain*)parent)->usr_enter_nm->WriteText(load_rc1->GetChildren()->GetContent());
         load_rc1=load_rc1->GetNext();
       }
