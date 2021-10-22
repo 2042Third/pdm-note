@@ -24,7 +24,13 @@ target_compile_options(
         cc20_multi PUBLIC
         -pthread -m64
 )
-target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX )
+if(WIN32)
+    target_compile_definitions(cc20_multi PUBLIC WINDOWS LINUX )
+elseif (APPLE)
+    target_compile_definitions(cc20_multi PUBLIC MACOS LINUX )
+elseif (UNIX)
+    target_compile_definitions(cc20_multi PUBLIC LINUX )
+endif ()
 #target_compile_definitions(cc20_multi PRIVATE LINUX )
 
 target_include_directories(cc20_multi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

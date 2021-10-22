@@ -32,7 +32,7 @@ project(pdm)
 
 
 # Request the required wxWidgets libs
-find_package(wxWidgets 3.1 COMPONENTS core base net webview richtext xml stc html xrc REQUIRED)
+find_package(wxWidgets 3.0 COMPONENTS core base net webview richtext xml stc html xrc REQUIRED)
 #find_package(pdm-network)
 # Include the wxWidgets use file to initialize various settings
 include(${wxWidgets_USE_FILE})
@@ -40,7 +40,16 @@ include(${wxWidgets_USE_FILE})
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3 -g   -fpermissive")
+if (WIN32)
+    set(PDM_LIBS pdm-network cc20_multi  ws2_32)
 
+elseif (APPLE)
+    set(PDM_LIBS pdm-network cc20_multi )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D LINUX -D MACOS")
+elseif (UNIX)
+    set(PDM_LIBS pdm-network cc20_multi )
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -D LINUX")
+endif ()
 
 # Define a variable containing a list of source files for the project
 set(SRC_FILES
@@ -64,7 +73,7 @@ add_subdirectory(safety)
 
 
 # Link required libraries to the executable
-target_link_libraries(${PROJECT_NAME} ws2_32 ${wxWidgets_LIBRARIES} pdm-network cc20_multi)
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${PDM_LIBS})
 
 if(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES

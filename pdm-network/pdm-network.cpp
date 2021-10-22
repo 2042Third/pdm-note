@@ -76,8 +76,9 @@ void pdm_network::upload_sync(std::string fname){
         curl_mime_data(field2, (user_nm).c_str(), CURL_ZERO_TERMINATED);
 
         headerlist = curl_slist_append(headerlist, buf);
-        curl_easy_setopt(curl, CURLOPT_URL, "pdm.pw:8080/file_up/UploadServlet");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://pdm.pw/file_up/UploadServlet");
         /* not needed for pdm*/
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); // Skip peer
         // if((argc == 2) && (!strcmp(argv[1], "noexpectheader")))
         //   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
         curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
@@ -122,11 +123,11 @@ void pdm_network::upload_sync_multi(std::string fname){
 
 
     // /* Fill in the submit field too, even if this is rarely needed */
-    // curl_formadd(&formpost,
-    //              &lastptr,
-    //              CURLFORM_COPYNAME, "submit",
-    //              CURLFORM_COPYCONTENTS, "send",
-    //              CURLFORM_END);
+     curl_formadd(&formpost,
+                  &lastptr,
+                  CURLFORM_COPYNAME, "serv_type",
+                  CURLFORM_COPYCONTENTS, "pdm_note_sync",
+                  CURLFORM_END);
 
     curl = curl_easy_init();
     /* initialize custom header list (stating that Expect: 100-continue is not
@@ -134,9 +135,11 @@ void pdm_network::upload_sync_multi(std::string fname){
     headerlist = curl_slist_append(headerlist, buf);
     if(curl) {
         /* what URL that receives this POST */
-        curl_easy_setopt(curl, CURLOPT_URL, "pdm.pw:8080/file_up/UploadServlet");
+        curl_easy_setopt(curl, CURLOPT_URL, "https://pdm.pw/file_up/UploadServlet");
         // if((argc == 2) && (!strcmp(argv[1], "noexpectheader")))
+
         //   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); // Skip peer
         curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
 
         /* Perform the request, res will get the return code */
@@ -171,14 +174,15 @@ void pdm_network::download_sync(std::string fname){
   curl_global_init(CURL_GLOBAL_DEFAULT);
   curl = curl_easy_init();
   if(curl) {
-    std::string get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+file_name;
+    std::string get_url="https://pdm.pw/file_up/download/"+user_nm+"/"+file_name;
     if(std::equal(fname.begin(), fname.end(), "pdm_rc.conf")){
-      get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
+      get_url="https://pdm.pw/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
 
     }
     curl_easy_setopt(curl, CURLOPT_URL,
     // ("pdm.pw:8080/file_up/download/test_file.txt"));
                      (get_url).c_str());
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); // Skip peer
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
 
@@ -220,6 +224,7 @@ void pdm_network::download_sync(std::string fname, std::string fpath){
     curl_easy_setopt(curl, CURLOPT_URL,
     // ("pdm.pw:8080/file_up/download/test_file.txt"));
                      (get_url).c_str());
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); // Skip peer
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, my_fwrite);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ftpfile);
 
