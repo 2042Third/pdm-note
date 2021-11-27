@@ -112,70 +112,6 @@ void Cc20::one_block(int thrd, uint32_t count) {
  * @param fsize input string length
 */
 
-void Cc20::encr(uint8_t*line,uint8_t*linew,unsigned long int fsize) {
-  
-  unsigned long int n = fsize;
-
-  long int tn = 0;
-  uint32_t count = 0;
-  for (long int i = 0; i < THREAD_COUNT; i++) {
-    writing_track[i] = 0;
-  }
-  long int tracker = 0;
-  long int np = 0, tmpn = np % THREAD_COUNT;
-  set_thread_arg(np % THREAD_COUNT, linew, tracker, n, 0, line, count, this);
-  threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, tmpn);
-  np++;
-  
-  for (unsigned long int k = 0; k < ((unsigned long int)(fsize / 64) + 1); k++) { // If leak, try add -1
-
-    if (n >= 64) {
-      tracker += 64;
-      if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
-        if (threads[np % THREAD_COUNT].joinable()) {
-          #ifdef VERBOSE
-          cout << "[main] Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
-          threads[np % THREAD_COUNT].join();
-        }
-        set_thread_arg(np % THREAD_COUNT, linew+tn, tracker, n, tn, line + tn, count + 1, this);
-        threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
-
-        tracker = 0;
-        np++;
-      }
-    } else {
-      if (threads[np % THREAD_COUNT].joinable() && final_line_written != 1) {
-          #ifdef VERBOSE
-          cout << "[main] Last Possible join, waiting " <<np % THREAD_COUNT<< endl;
-          #endif
-        threads[np % THREAD_COUNT].join();
-      }
-      set_thread_arg(np % THREAD_COUNT, linew+tn, tracker, n, tn, line + tn, count + 1, this);
-      threads[np % THREAD_COUNT] = thread(multi_enc_pthrd, np % THREAD_COUNT);
-    }
-    count += 1;
-    n -= 64;
-    tn += 64;
-  }
-  #ifdef VERBOSE
-  cout << "[main] Finished dispatching joining" << endl;
-  #endif
-  
-  for (int i = 0; i < THREAD_COUNT; i++) {
-    if (threads[i].joinable()){
-      threads[i].join();
-    }
-  }
-  if(ENABLE_SHA3_OUTPUT){
-    #ifndef DE
-    hashing.add(line,fsize );
-    #else 
-    hashing.add(linew,fsize );
-    #endif // DE
-  }
-}
-
 /**
  *
  * Creates one thread for writing and THREAD_COUNT threads for calculating the
@@ -193,7 +129,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   hashing = SHA3();
   uint8_t * data;
   uint8_t * line;
- cout<<"input length: "<<input_length<<endl;
+// cout<<"input length: "<<input_length<<endl;
   if(!DE)data = buf;
   else data = (uint8_t*)buf+12;
   line = data;
@@ -204,7 +140,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   for (long & writingTrack : writing_track) {
     writingTrack = 0;
   }
- cout<<"pos2"<<endl;
+// cout<<"pos2"<<endl;
   long int tracker = 0;
   long int np = 0, tmpn = np % THREAD_COUNT;
   linew=(unsigned char*)outstr+12;
@@ -212,6 +148,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
   if(DE){
    std::cout<<"Decryption selected"<<endl;
     ttn-=12;
+    n-=12;
     linew=(unsigned char*)outstr;
   }
 //  #endif
@@ -229,7 +166,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
 
     if (n >= 64) {
       tracker += 64;
-     cout <<n<< "[main] " <<tn<<"np"<<np<< endl;
+//     cout <<n<< "[main] " <<tn<<"np"<<np<< endl;
 
       if (tn % (BLOCK_SIZE) == 0 && (k != 0)) {
         if (threads[np % THREAD_COUNT].joinable()) {
@@ -258,7 +195,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
     n -= 64;
     tn += 64;
   }
- cout << "[main] Finished dispatching joining" << endl;
+// cout << "[main] Finished dispatching joining" << endl;
 
   for (int i = 0; i < THREAD_COUNT; i++) {
     if (threads[i].joinable()){
@@ -278,7 +215,7 @@ void Cc20::rd_file_encr(uint8_t * buf, uint8_t* outstr, size_t input_length) {
 //  cout << "[main] finished hash" << endl;
 
   if(DE){
-    outstr[input_length-13]='\0';
+    outstr[input_length-12]='\0';
   }
   else {
     outstr[input_length+12]='\0';

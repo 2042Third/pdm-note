@@ -17,6 +17,7 @@ class pdm_sync {
 
 public:
     void set_usr(char * a);
+    void set_usr(std::string a);
     int usr_set();
     int usr_sync(std::string a);
     int usr_get(std::string a="");

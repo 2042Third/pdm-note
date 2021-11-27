@@ -287,7 +287,7 @@ void cMain::open_enc_file(wxString infile) {
 
   DE = 1;
   cmd_enc((uint8_t*)data.data(),(size_t)CurrentFileSize,(uint8_t*)outstr.data(),((std::string)pswd_data));
-  std::printf("OF file:%s \n",outstr.data());
+//  std::printf("OF file:%s \n",outstr.data());
   pane_usrspc->Clear();
   pane_usrspc->WriteText(outstr.data());
 }
@@ -297,7 +297,7 @@ void cMain::stc_load_config(wxCommandEvent &event) {
 }
 void cMain::stc_get_syncing(wxCommandEvent &event) {
   if (!usr_enter_nm->GetValue().empty()){//repeated in the function
-    if(!syncing->usr_set()) syncing->set_usr(tctl_to_ary(usr_enter_nm));
+    if(!syncing->usr_set()) syncing->set_usr(usr_enter_nm->GetValue().ToStdString());
     int sync_out = syncing->usr_get((std::string)"pdm_rc.conf",
                                     static_cast<string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf"));
 
@@ -517,7 +517,7 @@ void cMain::stc_save(wxCommandEvent& event) {
       std::cout<<file.Length()<<std::endl;
       file.Close();
       if (!usr_enter_nm->GetValue().empty()){//repeated in the function
-        if(!syncing->usr_set()) syncing->set_usr(tctl_to_ary(usr_enter_nm));
+        if(!syncing->usr_set()) syncing->set_usr(usr_enter_nm->GetValue().ToStdString());
         int sync_out = syncing->usr_sync(std::string(CurrentDocPathEnc.mb_str()));
           if(sync_out){
               tree_ctrl->d_target->m_pOwner->WriteText(_("Saved to cloud.\n"));
@@ -556,7 +556,7 @@ void cMain::stc_save(wxCommandEvent& event) {
       file.Write(outstr.data(),CurrentFileSize);
       file.Close();
       if (!usr_enter_nm->GetValue().empty()){//repeated in the function
-        if(!syncing->usr_set()) syncing->set_usr(tctl_to_ary(usr_enter_nm));
+        if(!syncing->usr_set()) syncing->set_usr(usr_enter_nm->GetValue().ToStdString());
         int sync_out = syncing->usr_sync(std::string(CurrentDocPathEnc.mb_str()));
         if(sync_out){
           tree_ctrl->d_target->m_pOwner->WriteText(_("Saved to cloud.\n"));

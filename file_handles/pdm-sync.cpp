@@ -10,6 +10,9 @@ void pdm_sync::set_usr(char *a){
   usr_act = new pdm_network(bf);
 }
 
+void pdm_sync::set_usr(std::string a){
+  usr_act = new pdm_network(a);
+}
 
 int pdm_sync::usr_sync(std::string a){
   if(!usr_act)return 0;

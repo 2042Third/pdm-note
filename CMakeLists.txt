@@ -29,7 +29,7 @@ endif()
 # Name the project
 project(pdm)
 
-
+#set(CMAKE_PREFIX_PATH F:/wxWidgets)
 
 # Request the required wxWidgets libs
 find_package(wxWidgets 3.0 COMPONENTS core base net webview richtext xml stc html xrc REQUIRED)

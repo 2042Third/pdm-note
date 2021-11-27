@@ -216,9 +216,9 @@ void pdm_network::download_sync(std::string fname, std::string fpath){
   curl_global_init(CURL_GLOBAL_DEFAULT);
   curl = curl_easy_init();
   if(curl) {
-    std::string get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+file_name;
+    std::string get_url="https://pdm.pw/file_up/download/"+user_nm+"/"+file_name;
     if(std::equal(fname.begin(), fname.end(), "pdm_rc.conf")){
-      get_url="pdm.pw:8080/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
+      get_url="https://pdm.pw/file_up/download/"+user_nm+"/"+"config"+"/"+file_name;
 
     }
     curl_easy_setopt(curl, CURLOPT_URL,
