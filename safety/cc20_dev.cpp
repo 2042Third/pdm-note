@@ -70,6 +70,8 @@ template <>
 void roln<uint32_t>(uint32_t &val,unsigned int n) {
     val= (val << n) | (val >> (32-n));
 }
+
+// algo change #2
 static inline uint32_t rotl32(uint32_t x, int n)
 {
   // http://blog.regehr.org/archives/1063
@@ -91,10 +93,6 @@ void expan(uint32_t * ot, unsigned int off, const uint8_t* in, unsigned int n) {
 
 // Operate a quarter-round chacha state on total of 16 bytes or 4 32-bit numbers at a time.
 void quarteround(uint32_t * x, uint32_t a, uint32_t b, uint32_t c, uint32_t d){
-  // state[a] +=state[b]; state[d] ^=state[a]; roln(state[d] ,16);
-  // state[c] +=state[d]; state[b] ^=state[c]; roln(state[b] ,12);
-  // state[a] +=state[b]; state[d] ^=state[a]; roln(state[d] ,8);
-  // state[c] +=state[d]; state[b] ^=state[c]; roln(state[b] ,7);
   x[a] += x[b];
   x[d] = rotl32(x[d] ^ x[a], 16);
   x[c] += x[d];
