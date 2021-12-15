@@ -1,7 +1,7 @@
 ﻿//#pragma once
-#include "cMain.h"
-#include "cApp.h"
-#include "file_handles/Tree_Ctrl.h"
+#include "../include/cMain.h"
+#include "../include/cApp.h"
+#include "../file_handles/Tree_Ctrl.h"
 #include <wx/richtext/richtextbuffer.h>
 #include <vector>
 #include <string>
@@ -16,10 +16,10 @@
 #include "wx/mstream.h"
 #include "wx/wupdlock.h"
 #include <wx/tokenzr.h>
-#include "safety/cc20_multi.cpp"
-#include "id.h"
-#include "file_handles/pdmrc.h"
-#include "file_handles/pdm-sync.h"
+#include <cc20_multi.h>
+#include "../include/id.h"
+#include "../file_handles/pdmrc.h"
+#include "../file_handles/pdm-sync.h"
 
 //std::vector<wxString> current_files={};
 // TESTING ONLY -- Adapted from offical manual
@@ -49,7 +49,7 @@ wxBEGIN_EVENT_TABLE(cMain, wxFrame)
 wxEND_EVENT_TABLE()
 
 
-
+Cc20 cryp;
 
 cMain::cMain(wxWindow* parent,
 	wxWindowID id,
@@ -285,7 +285,7 @@ void cMain::open_enc_file(wxString infile) {
   tree_ctrl->d_target->m_pOwner->WriteText(infile+"\n");
   update_file_label(CurrentFileName,1,0);
 
-  DE = 1;
+  cryp.DE = 1;
   cmd_enc((uint8_t*)data.data(),(size_t)CurrentFileSize,(uint8_t*)outstr.data(),((std::string)pswd_data));
 //  std::printf("OF file:%s \n",outstr.data());
   pane_usrspc->Clear();
@@ -299,9 +299,9 @@ void cMain::stc_get_syncing(wxCommandEvent &event) {
   if (!usr_enter_nm->GetValue().empty()){//repeated in the function
     if(!syncing->usr_set()) syncing->set_usr(usr_enter_nm->GetValue().ToStdString());
     int sync_out = syncing->usr_get((std::string)"pdm_rc.conf",
-                                    static_cast<string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf"));
+                                    static_cast<std::string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf"));
 
-    tree_ctrl->d_target->m_pOwner->WriteText(_("Syncing from cloud to "+static_cast<string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf")+"\n"));
+    tree_ctrl->d_target->m_pOwner->WriteText(_("Syncing from cloud to "+static_cast<std::string>(file_dirtry.ToStdString() + sp + "pdm_rc.conf")+"\n"));
     rc_file->load_rc();
     if(sync_out){
       tree_ctrl->d_target->m_pOwner->WriteText(_("Synced from Cloud.\n"));
@@ -338,7 +338,7 @@ void cMain::stc_save_as(wxCommandEvent& event){
   }
   if(!check_enter_nm(usr_enter_nm))return;
   CurrentFileSize=file_len+12;
-  DE = 0;// Enable encryption
+  cryp.DE = 0;// Enable encryption
   cmd_enc((uint8_t*)data.data(),(size_t)file_len,(uint8_t*)outstr.data(),((std::string)pswd_data));
 
   CurrentFileName = "new_file";
@@ -505,7 +505,7 @@ void cMain::stc_save(wxCommandEvent& event) {
     stc_pswd_focus(event);
   }
   CurrentFileSize=inp_len+12;//CHANGE HERE
-  DE = 0;
+  cryp.DE = 0;
   cmd_enc((uint8_t*)data.data(),(size_t)inp_len,(uint8_t*)outstr.data(),((std::string)pswd_data));
   if (!CurrentFileName.empty()){
     CurrentFileNameEnc=CurrentFileName+".pdm";

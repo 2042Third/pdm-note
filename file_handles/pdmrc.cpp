@@ -4,7 +4,7 @@
 
 #include "pdmrc.h"
 #include "wx/xml/xml.h"
-#include "../cMain.h"
+#include "../include/cMain.h"
 #include "wx/time.h"
 #include "wx/utils.h"
 #include <wx/filefn.h>

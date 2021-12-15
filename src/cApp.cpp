@@ -1,7 +1,7 @@
 //#pragma once
-#include "cApp.h"
-#include "cMain.h" 
-#include "id.h"
+#include "../include/cApp.h"
+#include "../include/cMain.h"
+#include "../include/id.h"
 
 
 wxIMPLEMENT_APP(cApp);

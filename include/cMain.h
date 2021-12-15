@@ -6,7 +6,7 @@
 #endif
 //#include "pdmFile.h"
 //#include "cApp.h"
-#include "file_handles/Tree_Ctrl.h"
+#include "../file_handles/Tree_Ctrl.h"
 #include <vector>
 #include <cc20_multi.h>
 #include <iostream>
@@ -36,8 +36,8 @@
 #include <wx/filepicker.h>
 #include <wx/sizer.h>
 #include <wx/dialog.h>
-#include "file_handles/pdmrc.h"
-#include "file_handles/pdm-sync.h"
+#include "../file_handles/pdmrc.h"
+#include "../file_handles/pdm-sync.h"
 #include "wx/richtext/richtextctrl.h"
 //#include <wx/richtext/richtextbuffer.h>
 // #define wxUSE_DRAG_AND_DROP = 1

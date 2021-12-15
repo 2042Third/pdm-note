@@ -37,9 +37,9 @@ find_package(wxWidgets 3.0 COMPONENTS core base net webview richtext xml stc htm
 # Include the wxWidgets use file to initialize various settings
 include(${wxWidgets_USE_FILE})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3 -g   -fpermissive")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3  -m64")
 if (WIN32)
     set(PDM_LIBS pdm-network cc20_multi  ws2_32)
 
@@ -53,7 +53,7 @@ endif ()
 
 # Define a variable containing a list of source files for the project
 set(SRC_FILES
-        cApp.cpp  cMain.cpp
+        src/cApp.cpp src/cMain.cpp
         file_handles/Tree_Ctrl.cpp file_handles/Tree_Ctrl.h file_handles/pdmrc.cpp file_handles/pdmrc.h file_handles/pdm-sync.h file_handles/pdm-sync.cpp)
 
 if(WIN32)
@@ -66,9 +66,10 @@ endif()
 
 # Define the build target for the executable
 add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE ${SRC_FILES})
+#add_executable(${PROJECT_NAME}  ${SRC_FILES})
 
 add_subdirectory(pdm-network)
-add_subdirectory(safety)
+add_subdirectory(pdm-crypt-module)
 #target_link_libraries(${PROJECT_NAME} PRIVATE )
 
 

@@ -2,8 +2,8 @@
 // Created by MikeYang on 7/14/21.
 //
 //#pragma once
-#include "../cMain.h"
-#include "../cApp.h"
+#include "../include/cMain.h"
+#include "../include/cApp.h"
 #include "Tree_Ctrl.h"
 #include <vector>
 // Tree added includes
@@ -12,7 +12,7 @@
 #include <iostream>
 #include <functional>
 #include "wx/image.h"
-#include "../id.h"
+#include "../include/id.h"
 #include "wx/treectrl.h"
 #include "wx/math.h"
 #include "wx/wupdlock.h"
